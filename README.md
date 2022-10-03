@@ -1,7 +1,6 @@
 # FBMessangerChatBot 
-#Run
 Yarn install
-#add 
-.env file
-#Run App
+# Configuration
+add .env file into root directory with your credentials
+# Run App
 yarn start
