@@ -78,7 +78,7 @@ async function handleMessage(sender_psid, received_message) {
         const getProductId = received_message.text.split(" ");
         console.log("PROD ID", getProductId)
         const { connection } = mongoose
-        if (!getProductId[1]) {
+        if (getProductId[1]) {
             const collection = connection.db.collection('Products');
             const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
             message = data[0].description
