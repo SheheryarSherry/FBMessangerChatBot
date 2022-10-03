@@ -13,7 +13,6 @@ const postWebhook = (req, res) => {
         body.entry.forEach(function (entry) {
 
             // Gets the body of the webhook event
-            // Gets the body of the webhook event
             let webhook_event = entry.messaging[0];
             console.log(webhook_event);
 
@@ -68,9 +67,6 @@ async function handleMessage(sender_psid, received_message) {
     var responses = items[Math.floor(Math.random() * items.length)];
     // Check if the message contains text
     if (received_message.text.toLowerCase() === "hi") {
-        console.log("Testing", received_message.text.toLowerCase().includes('/desc'))
-        // Create the payload for a basic text message
-
         response = {
             "text": responses
         }
@@ -205,32 +201,8 @@ function callSendAPI(sender_psid, response) {
         }
     });
 }
-async function dbTest(req, res) {
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.GMEMAIL,
-            pass: process.env.GMPASS,
-        },
-    });
 
-    let mailOptions = {
-        from: 'sheheryarkhan1992@gmail.com',
-        to: "sheheryarkhan1992@hotmail.com",
-        subject: `The subject goes here`,
-        html: `The body of the email goes here in HTML`,
-    };
-
-    transporter.sendMail(mailOptions, function (err, info) {
-        if (err) {
-            res.json(err);
-        } else {
-            res.json(info);
-        }
-    });
-}
 module.exports = {
     postWebhook: postWebhook,
     getWebHook: getWebHook,
-    dbTest: dbTest
 }

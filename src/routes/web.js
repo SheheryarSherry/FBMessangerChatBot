@@ -1,5 +1,5 @@
 const express = require('express');
-const { getWebHook, postWebhook, dbTest} = require('../controllers/chatbotController');
+const { getWebHook, postWebhook} = require('../controllers/chatbotController');
 const getHomepage = require('../controllers/homepageController');
 const router = express.Router();
 /*
@@ -9,8 +9,6 @@ const initWebRoutes = (app) => {
     router.get('/', getHomepage.getHomepage);
     router.get('/webhook', getWebHook);
     router.post('/webhook', postWebhook);
-    router.get('/mail', dbTest);
-
     return app.use('/', router);
 };
 
