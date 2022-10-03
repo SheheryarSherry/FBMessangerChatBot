@@ -76,7 +76,7 @@ async function handleMessage(sender_psid, received_message) {
         const getProductId = received_message.text.split(" ");
         console.log("PROD ID",getProductId)
         const collection = connection.db.collection('Products');
-        const data = await collection.find({ sku: getProductId[1] }).toArray();
+        const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
         console.log(data)
         response = {
             "text": data[0].description
