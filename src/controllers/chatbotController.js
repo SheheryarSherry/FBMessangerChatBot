@@ -1,5 +1,6 @@
 const request = require('request');
 const mongoose = require('mongoose');
+const nodemailer = require("nodemailer");
 
 const postWebhook = (req, res) => {
     // Parse the request body from the POST
@@ -102,36 +103,41 @@ async function handleMessage(sender_psid, received_message) {
         response = {
             "text": data[0].shipping
         }
-    } else if (received_message.attachments) {
+    } else if (received_message.text.toLowerCase().includes('/buy')) {
+        const getProductId = received_message.text.split(" ");
+        const { connection } = mongoose
+        const collection = connection.db.collection('Products');
+        const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.GMEMAIL,
+                pass: process.env.GMPASS,
+            },
+        });
 
-        // Gets the URL of the message attachment
-        let attachment_url = received_message.attachments[0].payload.url;
-        response = {
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "generic",
-                    "elements": [{
-                        "title": "Is this the right picture?",
-                        "subtitle": "Tap a button to answer.",
-                        "image_url": attachment_url,
-                        "buttons": [
-                            {
-                                "type": "postback",
-                                "title": "Yes!",
-                                "payload": "yes",
-                            },
-                            {
-                                "type": "postback",
-                                "title": "No!",
-                                "payload": "no",
-                            }
-                        ],
-                    }]
-                }
+        let mailOptions = {
+            from: 'sheheryarkhan1992@gmail.com',
+            to: "sheheryarkhan1992@hotmail.com",
+            subject: `The subject goes here`,
+            html: `<body><h1>You Received an order</h1>
+            <p>Product ID: ${data.sku}</p>
+            <p>Price: ${data.price}</p>
+            <p>Shipping fee: ${data.shipping}</p>
+            <p>Description: ${data.description}</p>
+            </body>`,
+        };
+
+        transporter.sendMail(mailOptions, function (err, info) {
+            if (err) {
+                res.json(err);
+            } else {
+                res.json(info);
             }
+        });
+        response = {
+            "text": "Order Placed"
         }
-
     }
 
     // Sends the response message
@@ -180,14 +186,32 @@ function callSendAPI(sender_psid, response) {
         }
     });
 }
-// async function dbTest(req, res) {
-//     const collection = connection.db.collection('Products');
-//     const data = await collection.find({ sku: 43900 }).toArray();
-//     console.log(data)
-//     res.send(data)
-// }
+async function dbTest(req, res) {
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.GMEMAIL,
+            pass: process.env.GMPASS,
+        },
+    });
+
+    let mailOptions = {
+        from: 'sheheryarkhan1992@gmail.com',
+        to: "sheheryarkhan1992@hotmail.com",
+        subject: `The subject goes here`,
+        html: `The body of the email goes here in HTML`,
+    };
+
+    transporter.sendMail(mailOptions, function (err, info) {
+        if (err) {
+            res.json(err);
+        } else {
+            res.json(info);
+        }
+    });
+}
 module.exports = {
     postWebhook: postWebhook,
     getWebHook: getWebHook,
-    // dbTest: dbTest
+    dbTest: dbTest
 }
