@@ -1,5 +1,5 @@
 const request = require('request');
-const { connection } = require('mongoose');
+const mongoose = require('mongoose');
 
 const postWebhook = (req, res) => {
     // Parse the request body from the POST
@@ -66,7 +66,7 @@ async function handleMessage(sender_psid, received_message) {
     var responses = items[Math.floor(Math.random() * items.length)];
     // Check if the message contains text
     if (received_message.text.toLowerCase() === "hi") {
-        console.log("Testing",received_message.text.toLowerCase().includes('/desc'))
+        console.log("Testing", received_message.text.toLowerCase().includes('/desc'))
         // Create the payload for a basic text message
 
         response = {
@@ -74,7 +74,8 @@ async function handleMessage(sender_psid, received_message) {
         }
     } else if (received_message.text.toLowerCase().includes('/desc')) {
         const getProductId = received_message.text.split(" ");
-        console.log("PROD ID",getProductId)
+        console.log("PROD ID", getProductId)
+        const { connection } = mongoose
         const collection = connection.db.collection('Products');
         const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
         console.log(data)
