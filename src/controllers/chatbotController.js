@@ -78,70 +78,84 @@ async function handleMessage(sender_psid, received_message) {
         const getProductId = received_message.text.split(" ");
         console.log("PROD ID", getProductId)
         const { connection } = mongoose
-        if (getProductId[1]) {
+        if (getProductId[1] || getProductId[1] !== "") {
             const collection = connection.db.collection('Products');
             const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
             message = data[0].description
         } else {
-            message = "please Enter Product ID eg:/desc <your product Id>"
+            message = "please Enter Product ID"
         }
         response = {
             "text": message
         }
     } else if (received_message.text.toLowerCase().includes('/price')) {
-        const getProductId = received_message.text.split(" ");
-        console.log("PROD ID", getProductId)
-        const { connection } = mongoose
-        const collection = connection.db.collection('Products');
-        const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
-        console.log(data)
+        if (getProductId[1] || getProductId[1] !== "") {
+            const getProductId = received_message.text.split(" ");
+            console.log("PROD ID", getProductId)
+            const { connection } = mongoose
+            const collection = connection.db.collection('Products');
+            const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
+            message = data[0].price
+        } else {
+            message = "please Enter Product ID"
+        }
         response = {
-            "text": data[0].price
+            "text": message
         }
     } else if (received_message.text.toLowerCase().includes('/shipping')) {
-        const getProductId = received_message.text.split(" ");
-        console.log("PROD ID", getProductId)
-        const { connection } = mongoose
-        const collection = connection.db.collection('Products');
-        const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
-        console.log(data)
+        if (getProductId[1] || getProductId[1] !== "") {
+            const getProductId = received_message.text.split(" ");
+            console.log("PROD ID", getProductId)
+            const { connection } = mongoose
+            const collection = connection.db.collection('Products');
+            const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
+            message = data[0].shipping
+        } else {
+            message = "please Enter Product ID"
+        }
         response = {
-            "text": data[0].shipping
+            "text": message
         }
     } else if (received_message.text.toLowerCase().includes('/buy')) {
-        const getProductId = received_message.text.split(" ");
-        const { connection } = mongoose
-        const collection = connection.db.collection('Products');
-        const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
-        let transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.GMEMAIL,
-                pass: process.env.GMPASS,
-            },
-        });
+        if (getProductId[1] || getProductId[1] !== "") {
+            const getProductId = received_message.text.split(" ");
+            const { connection } = mongoose
+            const collection = connection.db.collection('Products');
+            const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.GMEMAIL,
+                    pass: process.env.GMPASS,
+                },
+            });
 
-        let mailOptions = {
-            from: 'sheheryarkhan1992@gmail.com',
-            to: "sheheryarkhan1992@hotmail.com",
-            subject: `The subject goes here`,
-            html: `<body><h1>You Received an order</h1>
+            let mailOptions = {
+                from: 'sheheryarkhan1992@gmail.com',
+                to: "sheheryarkhan1992@hotmail.com",
+                subject: `The subject goes here`,
+                html: `<body><h1>You Received an order</h1>
             <p>Product ID: ${data[0].sku}</p>
             <p>Price: ${data[0].price}</p>
             <p>Shipping fee: ${data[0].shipping}</p>
             <p>Description: ${data[0].description}</p>
             </body>`,
-        };
+            };
 
-        transporter.sendMail(mailOptions, function (err, info) {
-            if (err) {
-                res.json(err);
-            } else {
-                res.json(info);
+            transporter.sendMail(mailOptions, function (err, info) {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(info);
+                }
+            });
+            response = {
+                "text": "Order Placed"
             }
-        });
-        response = {
-            "text": "Order Placed"
+        } else {
+            response = {
+                "text": "please Enter Product ID"
+            }
         }
     }
 
