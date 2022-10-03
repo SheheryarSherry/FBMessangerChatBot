@@ -77,8 +77,8 @@ async function handleMessage(sender_psid, received_message) {
     } else if (received_message.text.toLowerCase().includes('/desc')) {
         const getProductId = received_message.text.split(" ");
         console.log("PROD ID", getProductId)
-        const { connection } = mongoose
         if (getProductId[1]) {
+            const { connection } = mongoose
             const collection = connection.db.collection('Products');
             const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
             message = data[0].description
@@ -89,9 +89,9 @@ async function handleMessage(sender_psid, received_message) {
             "text": message
         }
     } else if (received_message.text.toLowerCase().includes('/price')) {
+        const getProductId = received_message.text.split(" ");
+        console.log("PROD ID", getProductId)
         if (getProductId[1]) {
-            const getProductId = received_message.text.split(" ");
-            console.log("PROD ID", getProductId)
             const { connection } = mongoose
             const collection = connection.db.collection('Products');
             const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
@@ -103,9 +103,9 @@ async function handleMessage(sender_psid, received_message) {
             "text": message
         }
     } else if (received_message.text.toLowerCase().includes('/shipping')) {
+        const getProductId = received_message.text.split(" ");
+        console.log("PROD ID", getProductId)
         if (getProductId[1]) {
-            const getProductId = received_message.text.split(" ");
-            console.log("PROD ID", getProductId)
             const { connection } = mongoose
             const collection = connection.db.collection('Products');
             const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
@@ -117,8 +117,8 @@ async function handleMessage(sender_psid, received_message) {
             "text": message
         }
     } else if (received_message.text.toLowerCase().includes('/buy')) {
+        const getProductId = received_message.text.split(" ");
         if (getProductId[1]) {
-            const getProductId = received_message.text.split(" ");
             const { connection } = mongoose
             const collection = connection.db.collection('Products');
             const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
