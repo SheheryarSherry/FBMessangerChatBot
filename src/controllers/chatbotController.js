@@ -121,10 +121,10 @@ async function handleMessage(sender_psid, received_message) {
             to: "sheheryarkhan1992@hotmail.com",
             subject: `The subject goes here`,
             html: `<body><h1>You Received an order</h1>
-            <p>Product ID: ${data.sku}</p>
-            <p>Price: ${data.price}</p>
-            <p>Shipping fee: ${data.shipping}</p>
-            <p>Description: ${data.description}</p>
+            <p>Product ID: ${data[0].sku}</p>
+            <p>Price: ${data[0].price}</p>
+            <p>Shipping fee: ${data[0].shipping}</p>
+            <p>Description: ${data[0].description}</p>
             </body>`,
         };
 
@@ -132,12 +132,11 @@ async function handleMessage(sender_psid, received_message) {
             if (err) {
                 res.json(err);
             } else {
-                res.json(info);
+                response = {
+                    "text": "Order Placed"
+                }
             }
         });
-        response = {
-            "text": "Order Placed"
-        }
     }
 
     // Sends the response message
