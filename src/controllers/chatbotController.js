@@ -66,15 +66,15 @@ async function handleMessage(sender_psid, received_message) {
     var responses = items[Math.floor(Math.random() * items.length)];
     // Check if the message contains text
     if (received_message.text.toLowerCase() === "hi" || 'hello' || 'good morning') {
-
+        console.log("Testing",received_message.text.toLowerCase().includes('/desc'))
         // Create the payload for a basic text message
 
         response = {
             "text": responses
         }
-    } else if (received_message.text.toLowerCase().includes('desc')) {
+    } else if (received_message.text.toLowerCase().includes('/desc')) {
         const getProductId = received_message.text.split(" ");
-        console.log(getProductId)
+        console.log("PROD ID",getProductId)
         const collection = connection.db.collection('Products');
         const data = await collection.find({ sku: getProductId[1] }).toArray();
         console.log(data)
