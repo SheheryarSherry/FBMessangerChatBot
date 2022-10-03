@@ -78,7 +78,7 @@ async function handleMessage(sender_psid, received_message) {
         const getProductId = received_message.text.split(" ");
         console.log("PROD ID", getProductId)
         const { connection } = mongoose
-        if (getProductId[1] || getProductId[1] !== "") {
+        if (getProductId[1]) {
             const collection = connection.db.collection('Products');
             const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
             message = data[0].description
@@ -89,7 +89,7 @@ async function handleMessage(sender_psid, received_message) {
             "text": message
         }
     } else if (received_message.text.toLowerCase().includes('/price')) {
-        if (getProductId[1] || getProductId[1] !== "") {
+        if (getProductId[1]) {
             const getProductId = received_message.text.split(" ");
             console.log("PROD ID", getProductId)
             const { connection } = mongoose
@@ -103,7 +103,7 @@ async function handleMessage(sender_psid, received_message) {
             "text": message
         }
     } else if (received_message.text.toLowerCase().includes('/shipping')) {
-        if (getProductId[1] || getProductId[1] !== "") {
+        if (getProductId[1]) {
             const getProductId = received_message.text.split(" ");
             console.log("PROD ID", getProductId)
             const { connection } = mongoose
@@ -117,7 +117,7 @@ async function handleMessage(sender_psid, received_message) {
             "text": message
         }
     } else if (received_message.text.toLowerCase().includes('/buy')) {
-        if (getProductId[1] || getProductId[1] !== "") {
+        if (getProductId[1]) {
             const getProductId = received_message.text.split(" ");
             const { connection } = mongoose
             const collection = connection.db.collection('Products');
