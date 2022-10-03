@@ -1,5 +1,5 @@
 const request = require('request');
-const { connection } = require('mongoose');
+const mongoose = require('mongoose');
 
 const postWebhook = (req, res) => {
     // Parse the request body from the POST
@@ -74,8 +74,10 @@ async function handleMessage(sender_psid, received_message) {
         }
     } else if (received_message.text.toLowerCase().includes('desc')) {
         const getProductId = received_message.text.split(" ");
+        console.log(getProductId)
         const collection = connection.db.collection('Products');
         const data = await collection.find({ sku: getProductId[1] }).toArray();
+        console.log(data)
         response = {
             "text": data[0].description
         }
