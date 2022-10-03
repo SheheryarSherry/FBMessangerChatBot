@@ -1,5 +1,5 @@
 const request = require('request');
-const mongoose = require('mongoose');
+const { connection } = require('mongoose');
 
 const postWebhook = (req, res) => {
     // Parse the request body from the POST
@@ -159,14 +159,14 @@ function callSendAPI(sender_psid, response) {
         }
     });
 }
-async function dbTest(req, res) {
-    const collection = connection.db.collection('Products');
-    const data = await collection.find({ sku: 43900 }).toArray();
-    console.log(data)
-    res.send(data)
-}
+// async function dbTest(req, res) {
+//     const collection = connection.db.collection('Products');
+//     const data = await collection.find({ sku: 43900 }).toArray();
+//     console.log(data)
+//     res.send(data)
+// }
 module.exports = {
     postWebhook: postWebhook,
     getWebHook: getWebHook,
-    dbTest: dbTest
+    // dbTest: dbTest
 }
