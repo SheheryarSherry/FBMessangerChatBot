@@ -82,6 +82,26 @@ async function handleMessage(sender_psid, received_message) {
         response = {
             "text": data[0].description
         }
+    } else if (received_message.text.toLowerCase().includes('/price')) {
+        const getProductId = received_message.text.split(" ");
+        console.log("PROD ID", getProductId)
+        const { connection } = mongoose
+        const collection = connection.db.collection('Products');
+        const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
+        console.log(data)
+        response = {
+            "text": data[0].price
+        }
+    } else if (received_message.text.toLowerCase().includes('/shipping')) {
+        const getProductId = received_message.text.split(" ");
+        console.log("PROD ID", getProductId)
+        const { connection } = mongoose
+        const collection = connection.db.collection('Products');
+        const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
+        console.log(data)
+        response = {
+            "text": data[0].shipping
+        }
     } else if (received_message.attachments) {
 
         // Gets the URL of the message attachment
