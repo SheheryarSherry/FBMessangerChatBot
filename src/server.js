@@ -22,4 +22,4 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`App is runnig at port ${port}`);
 })
-mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.sivkx.mongodb.net/fbChatBot?retryWrites=true&w=majority`);
+mongoose.connect("mongodb+srv://sheheryar:sherry73@cluster0.sivkx.mongodb.net/fbChatBot?retryWrites=true&w=majority");
