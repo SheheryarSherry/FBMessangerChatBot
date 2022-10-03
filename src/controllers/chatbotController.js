@@ -63,7 +63,7 @@ const getWebHook = (req, res) => {
 // Handles messages events
 async function handleMessage(sender_psid, received_message) {
     let response;
-    let errMessage;
+    let message;
     const items = ['How are you?', 'I hope you are doing well.', 'I hope you are having a great day.']
     var responses = items[Math.floor(Math.random() * items.length)];
     // Check if the message contains text
@@ -81,12 +81,12 @@ async function handleMessage(sender_psid, received_message) {
         if (!getProductId[1]) {
             const collection = connection.db.collection('Products');
             const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
-            console.log(data)
+            message = data[0].description
         } else {
-            errMessage = "please Enter Product ID eg:/desc <your product Id>"
+            message = "please Enter Product ID eg:/desc <your product Id>"
         }
         response = {
-            "text": getProductId[1] ? data[0].description : errMessage
+            "text": message
         }
     } else if (received_message.text.toLowerCase().includes('/price')) {
         const getProductId = received_message.text.split(" ");
