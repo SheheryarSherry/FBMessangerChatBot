@@ -1,4 +1,5 @@
 const request = require('request');
+const { connection } = require('mongoose');
 
 const postWebhook = (req, res) => {
     // Parse the request body from the POST
@@ -61,13 +62,15 @@ const getWebHook = (req, res) => {
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
     let response;
-
+    const items = ['How are you?', 'I hope you are doing well.', 'I hope you are having a great day.']
+    var responses = items[Math.floor(Math.random() * items.length)];
     // Check if the message contains text
-    if (received_message.text) {
+    if (received_message.text.toLowerCase() === "hi" || 'hello' || 'good morning') {
 
         // Create the payload for a basic text message
+
         response = {
-            "text": `You sent the message: "${received_message.text}". Now send me an image!`
+            "text": responses
         }
     } else if (received_message.attachments) {
 
@@ -147,7 +150,16 @@ function callSendAPI(sender_psid, response) {
         }
     });
 }
+async function dbTest(req, res) {
+    console.log('test')
+    const { connection } = mongoose
+    const collection = connection.db.collection('Products');
+    const data = await collection.find({ sku: 43900 }).toArray();
+    console.log(data)
+    res.send(data)
+}
 module.exports = {
     postWebhook: postWebhook,
-    getWebHook: getWebHook
+    getWebHook: getWebHook,
+    dbTest: dbTest
 }
