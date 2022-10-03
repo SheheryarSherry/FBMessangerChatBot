@@ -65,7 +65,7 @@ async function handleMessage(sender_psid, received_message) {
     const items = ['How are you?', 'I hope you are doing well.', 'I hope you are having a great day.']
     var responses = items[Math.floor(Math.random() * items.length)];
     // Check if the message contains text
-    if (received_message.text.toLowerCase() === "hi" || 'hello' || 'good morning') {
+    if (received_message.text.toLowerCase() === "hi") {
         console.log("Testing",received_message.text.toLowerCase().includes('/desc'))
         // Create the payload for a basic text message
 
