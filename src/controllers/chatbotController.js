@@ -86,7 +86,7 @@ async function handleMessage(sender_psid, received_message) {
             errMessage = "please Enter Product ID eg:/desc <your product Id>"
         }
         response = {
-            "text": getProductId[0] ? data[0].description : errMessage
+            "text": getProductId[1] ? data[0].description : errMessage
         }
     } else if (received_message.text.toLowerCase().includes('/price')) {
         const getProductId = received_message.text.split(" ");
