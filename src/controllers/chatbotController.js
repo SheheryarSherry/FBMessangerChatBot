@@ -63,6 +63,7 @@ const getWebHook = (req, res) => {
 // Handles messages events
 async function handleMessage(sender_psid, received_message) {
     let response;
+    let errMessage;
     const items = ['How are you?', 'I hope you are doing well.', 'I hope you are having a great day.']
     var responses = items[Math.floor(Math.random() * items.length)];
     // Check if the message contains text
@@ -77,11 +78,15 @@ async function handleMessage(sender_psid, received_message) {
         const getProductId = received_message.text.split(" ");
         console.log("PROD ID", getProductId)
         const { connection } = mongoose
-        const collection = connection.db.collection('Products');
-        const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
-        console.log(data)
+        if (!getProductId[1]) {
+            const collection = connection.db.collection('Products');
+            const data = await collection.find({ sku: Number(getProductId[1]) }).toArray();
+            console.log(data)
+        } else {
+            errMessage = "please Enter Product ID eg:/desc <your product Id>"
+        }
         response = {
-            "text": data[0].description
+            "text": getProductId[0] ? data[0].description : errMessage
         }
     } else if (received_message.text.toLowerCase().includes('/price')) {
         const getProductId = received_message.text.split(" ");
@@ -132,11 +137,12 @@ async function handleMessage(sender_psid, received_message) {
             if (err) {
                 res.json(err);
             } else {
-                response = {
-                    "text": "Order Placed"
-                }
+                res.json(info);
             }
         });
+        response = {
+            "text": "Order Placed"
+        }
     }
 
     // Sends the response message
